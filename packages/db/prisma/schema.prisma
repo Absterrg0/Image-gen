@@ -34,6 +34,7 @@ model Model{
   bald            Boolean
   outputImages    OutputImage[]
   trainingImages  TrainingImages[]
+  userId          String
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 }
@@ -41,7 +42,7 @@ model Model{
 
 model TrainingImages {
   id              String    @id  @default(uuid())
-  imageUrl        String
+  imageUrl        String    @default("")
   modelId         String
   model           Model     @relation(fields: [modelId],references: [id])
   createdAt       DateTime  @default(now())
@@ -52,8 +53,11 @@ model TrainingImages {
 
 model OutputImage {
   id              String    @id @default(uuid())
-  imageUrl        String
+  imageUrl        String    @default("")
+  status          StatusEnum
+  prompt          String
   modelId         String
+  userId          String
   model           Model     @relation(fields: [modelId],references: [id])
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -101,3 +105,9 @@ enum EyeColorType {
   Hazel
 }
 
+
+enum StatusEnum {
+  Pending
+  Generated
+  Failed
+}
